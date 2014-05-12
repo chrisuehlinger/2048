@@ -183,14 +183,15 @@ AI.prototype = {
 
       var newMax = 0;
       this.currentGame.grid.eachCell(function(x, y, cell){
-        if(cell.value > newMax){
+        if(cell && cell['value'] && cell.value > newMax){
           newMax = cell.value;
         }
       });
 
-      if(newMax > maxTile){
+      if(newMax > this.maxTile){
         this.maximinMemo = {};
         this.minimaxMemo = {};
+        this.maxTile = newMax;
       }
 
       if(bestMove.move == -1){
