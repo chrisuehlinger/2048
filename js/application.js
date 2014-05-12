@@ -4,5 +4,5 @@ window.requestAnimationFrame(function () {
   // var inputManager = new KeyboardInputManager();
   var actuator = new HTMLActuator();
   var manager = new GameManager(4, ai, actuator, LocalStorageManager);
-  setTimeout(function(){ai.run(manager.game);}, 100);
+  //setTimeout(function(){ai.run(manager.game);}, 100);
 });
