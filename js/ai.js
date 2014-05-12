@@ -153,6 +153,11 @@ AI.prototype = {
     }
   },
 
+  pruneMemo: function(memo){
+
+
+  },
+
   makeMove: function(){
     if(!this.currentGame.over){
       var branchingFactor = this.currentGame.grid.availableCells().length;
@@ -176,6 +181,18 @@ AI.prototype = {
       console.log('Used Memo ' + maximinUsedMemo + ' times');
       console.log('Did not use memo ' + maximinDidNotUseMemo + ' times');
 
+      var newMax = 0;
+      this.currentGame.grid.eachCell(function(x, y, cell){
+        if(cell.value > newMax){
+          newMax = cell.value;
+        }
+      });
+
+      if(newMax > maxTile){
+        this.maximinMemo = {};
+        this.minimaxMemo = {};
+      }
+
       if(bestMove.move == -1){
         bestMove = this.maximin(this.currentGame, 1);
       }
@@ -188,6 +205,7 @@ AI.prototype = {
   run: function(game){
     this.events['restart']();
     this.currentGame = game;
+    this.maxTile = 2;
     this.makeMove();
   }
 };
