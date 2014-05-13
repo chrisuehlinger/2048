@@ -181,17 +181,14 @@ AI.prototype = {
       console.log('Used Memo ' + maximinUsedMemo + ' times');
       console.log('Did not use memo ' + maximinDidNotUseMemo + ' times');
 
-      var newMax = 0;
-      this.currentGame.grid.eachCell(function(x, y, cell){
-        if(cell && cell['value'] && cell.value > newMax){
-          newMax = cell.value;
-        }
-      });
-
-      if(newMax > this.maxTile){
+      console.log('Maximin Memo size: ' + Object.keys(this.maximinMemo).length);
+      if(Object.keys(this.maximinMemo).length > 10000){
         this.maximinMemo = {};
+      }
+
+      console.log('Minimax Memo size: ' + Object.keys(this.minimaxMemo).length);
+      if(Object.keys(this.minimaxMemo).length > 10000){
         this.minimaxMemo = {};
-        this.maxTile = newMax;
       }
 
       if(bestMove.move == -1){
