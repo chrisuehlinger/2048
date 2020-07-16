@@ -1,13 +1,12 @@
-function AI(){
+function Drone(){
 	this.direction = 0;
-  this.events = {};
 };
 
 var MAX_DEPTH = 4;
 var maximinUsedMemo = 0;
 var maximinDidNotUseMemo = 0;
 
-AI.prototype = {
+Drone.prototype = {
   // Old Ways of Playing
   playClockWise: function(){
     console.log("Hey");
@@ -23,17 +22,10 @@ AI.prototype = {
     }
   },
 
-  // New stuff
-  on: function(event, callback){
-    this.events[event] = callback;
-  },
-
   staticScoreMemo: {},
 
   staticScore: function(game){
-    if(game.won){
-      return Infinity;
-    } else if(game.over){
+    if(game.over){
       return -Infinity;
     }else {
       // var serializedGrid = JSON.stringify(game.grid.serialize());
@@ -48,7 +40,8 @@ AI.prototype = {
         var cellsUsed = (game.size*game.size - game.grid.cellsAvailable());
         // this.staticScoreMemo[serializedGrid] = scoreWeight*game.score - spaceWeight*cellsUsed;
 
-        return scoreWeight*game.score - spaceWeight*cellsUsed;
+        let theScore = scoreWeight*game.score - spaceWeight*cellsUsed;
+        return theScore;
       // }
     }
 
@@ -57,12 +50,10 @@ AI.prototype = {
   minimaxMemo: {},
 
   minimax: function(game, depth){
-    if(game.won){
-      return {'newTile': new Tile({x:-1, y:-1}, -1), 'score': Infinity};
-    } else if(!game.movesAvailable()){
-      return {'newTile': new Tile({x:-1, y:-1}, -1), 'score': -Infinity};
+    if(!game.movesAvailable()){
+      return {'score': -Infinity};
     }else if(depth <= 0){
-      return {'newTile': new Tile({x:-1, y:-1}, -1), 'score': this.staticScore(game)}
+      return {'score': this.staticScore(game)}
     }else{
       var serializedGame = game.serialize();
       var key = JSON.stringify(serializedGame);
@@ -116,9 +107,7 @@ AI.prototype = {
   maximinMemo: {},
 
   maximin: function(game, depth){
-    if(game.won){
-      return {'move': -1, 'score': Infinity};
-    } else if(!game.movesAvailable()){
+    if(!game.movesAvailable()){
       return {'move': -1, 'score': -Infinity};
     }else if(depth <= 0){
       return {'move': -1, 'score': this.staticScore(game)}
@@ -177,16 +166,16 @@ AI.prototype = {
       bestMove = this.maximin(this.currentGame, maxDepth);
       
       console.log(bestMove);
-      console.log('MaxDepth: ' + maxDepth);
-      console.log('Used Memo ' + maximinUsedMemo + ' times');
-      console.log('Did not use memo ' + maximinDidNotUseMemo + ' times');
+      // console.log('MaxDepth: ' + maxDepth);
+      // console.log('Used Memo ' + maximinUsedMemo + ' times');
+      // console.log('Did not use memo ' + maximinDidNotUseMemo + ' times');
 
-      console.log('Maximin Memo size: ' + Object.keys(this.maximinMemo).length);
+      // console.log('Maximin Memo size: ' + Object.keys(this.maximinMemo).length);
       if(Object.keys(this.maximinMemo).length > 10000){
         this.maximinMemo = {};
       }
 
-      console.log('Minimax Memo size: ' + Object.keys(this.minimaxMemo).length);
+      // console.log('Minimax Memo size: ' + Object.keys(this.minimaxMemo).length);
       if(Object.keys(this.minimaxMemo).length > 10000){
         this.minimaxMemo = {};
       }
@@ -199,11 +188,4 @@ AI.prototype = {
       setTimeout(this.makeMove.bind(this), 100);
     }
   },
-
-  run: function(game){
-    this.events['restart']();
-    this.currentGame = game;
-    this.maxTile = 2;
-    this.makeMove();
-  }
 };
