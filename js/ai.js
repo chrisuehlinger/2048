@@ -122,7 +122,7 @@ AI.prototype = {
     }
   },
 
-  setupLiaisons: function (numLiaisons=12){
+  setupLiaisons: function (numLiaisons=6){
     this.liaisons = [];
     this.nextLiaison = 0;
     this.readyWorkers = 0;
